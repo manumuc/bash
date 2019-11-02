@@ -1,0 +1,156 @@
+## configure sound
+# 1. Test sound
+# 1.1 Press Alt+<F2>, run
+# 1.2 enter 
+sudo aplay /usr/share/sounds/alsa/Front_Center.wav
+sudo addgroup <username> audio
+# 1.3 test if the sound cared is recognized
+sudo aplay -l
+# 1.4 see if the sound module is installed
+find /lib/modules/`uname -r`| grep snd
+# 1.5 to install sound card drivers and restart
+sudo apt-get install linux-restricted-modules-`uname -r` linux-generic
+# 1.6 is the sound card physically installed and recognized
+lspci -v | grep -A7 -i "audio"
+# 1.7 manually start the audio driver
+#sudo modprobe snd-[namesnddrive] i.e. 
+sudo modprobe snd-via82xx
+# 1.8 override the auto-detection by editing 
+gksudo gedit /etc/modules
+
+## Line Input / Microphone Troubleshooting
+# 1.1 Check if the microphone is unmuted
+# Open sound preferences by left-clicking on a speaker icon in Gnome panel. Or press Alt+<F2> and type 
+gnome-volume-control
+# check if the microphone is unmoted
+# ensure that pavucontrol  is installed
+sudo apt-get install pavucontrol
+# open the control via press Alt+<F2> and type
+pavucontrol 
+
+
+## Video
+# 1.2 General 
+https://help.ubuntu.com/community/BinaryDriverHowto
+# Web Cams https://help.ubuntu.com/community/Webcam
+
+## Printers
+# https://help.ubuntu.com/community/Printers
+printing to pdf https://help.ubuntu.com/community/PrintToPDF
+
+
+## printer for tablets and phones
+
+
+## Wired Network
+
+
+## Wireless networking
+
+
+## Access Point
+https://help.ubuntu.com/community/WifiDocs/WirelessAccessPoint
+
+## Access windows Shares
+# with AD / Kerberos
+
+
+
+## Access Ubuntu device
+
+## Thin client
+https://help.ubuntu.com/community/ThinClients
+## 1.1 RTP to Windows
+## 1.2 "RDP" to Ubuntu 
+## 1.3 VPN Fortinet
+## 1.4 VPN Pulse
+## 1.5 SSH Access
+## 1.6 PXE Server
+## 1.7 Firewall 
+## 1.8 Nagios 
+## 1.9 KVM
+
+
+## Portable audio/video players/Smart Phones/Tablets
+https://help.ubuntu.com/community/PortableDevices
+
+
+# get version 
+cat /etc/lsb-release
+
+
+# 
+# install meta-package build-essential
+sudo apt-get install build-essential
+sudo apt-get update 
+
+## install Windows fonts
+# sudo apt-get install msttcorefonts
+
+
+## install desktop background
+sudo apt-get install myunity
+# download more themes from: http://gnome-look.org/index.php?xcontentmode=167&PHPSESSID=1a2593ba5f075104ad3ec7dea19f4795
+# Most of the themes are in compressed format tar.gz so to have them available as a choice in Myunity, and probably most other theme tools, extract the file's contents to ~/usr/share/themes for themes, and ~/usr/share/icons for icons
+# Right click desktop and choose Change Desktop Background
+
+# get gcc version
+gcc --version
+sudo update-alterantives --list gcc
+
+## install vmware player on ubuntu
+#---------------------------------
+#1. install required packages
+sudo apt-get install build-essential linux-headers-$(uname -r) 
+# 2. download latest vmware player i.e. # 6.0.2.1744117.x86.64.bundle and run it with the graphical 
+# interface
+chmod +x ~/Downloads/VMware-Player-6.0.2-1744117.x86_64.bundle
+gksudo bash ~/Downloads/VMware-Player-6.0.2-1744117.x86_64.bundle
+# note: vmware-config.pl is not present anymore. 
+# if present remove /etc/vmware/not_configured
+
+## uninstall vmware via GUI
+# 1. run  the followng command to get the graphical installer
+gksudo bash ./Vmware-Player-2.5.1-126130.i386.bundle
+# 2. if not wirking use this
+sudo vmware-installer -u vmware-player
+## Manual uninstall vmware workstation
+# 1. 
+sudo su -
+# 2. shutdown vmware application
+/etc/init.d/vmware stop
+# 3. verify if all processes have been dropped
+# a 0 has to be listed beside VMware related modules
+lsmod | grep vm
+# 
+# 4. move VMware libs to the temp folder
+cd /lib/modules/<kernel_version>/misc
+vm vm* /tmp  
+# 5. unload the kerenl modules
+rmmod vmnet.o
+rmmod vmmon.o
+rmmod vmci.o
+rmmod vmblock.o
+rmmod vmppuser.o
+# 6. remove vmware startup scripts
+rm /etc/rc.d/init.d/rc2.d/*vmware
+rm /etc/rc.d/init.d/rc3.d/*vmware 
+rm /etc/rc.d/init.d/rc5.d/*vmware
+rm /etc/rc.d/init.d/rc6.d/*vmware
+# 7. remove vmware files and directories
+rm -rf /etc/vmware*
+rm /usr/bin/vmware*
+rm /usr/bin/vmnet*
+rm -r /usr/lib/vmware-installer
+rm -r /usr/lib/vmware-vix
+rm -r /usr/lib/vmware
+rm -r /usr/share/doc/vmware
+# create a blank image: http://www.easyvmx.com/
+# improve performance: 
+# If Ubuntu hangs when trying to suspend, try adding the following to /etc/pm/config.d/unload_modules: 
+SUSPEND_MODULES="$SUSPEND_MODULES vboxdrv vboxnetflt vboxnetadp vboxpci "
+After updating and installing security updates on raring ringtail, vmplayer launched the "vmware kernel module update" and hung there waiting. 
+sudo vmware-modconfig --console --install-all
+
+# open vmware player
+vmware -h 
